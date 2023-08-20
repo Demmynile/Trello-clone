@@ -21,8 +21,15 @@ const idToColumnText: {
 };
 
 function Column({ id, todos, index }: Props) {
-  const [searchString] = useBoardStore((state) => [state.searchString]);
+  const [searchString, setNewTaskType] = useBoardStore((state) => [
+    state.searchString,
+    state.setNewTaskType,
+  ]);
   const openModal = useModalstore((state) => state.openModal);
+  const handleAddModal = () => {
+    setNewTaskType(id);
+    openModal();
+  };
   return (
     <Draggable draggableId={id} index={index}>
       {(provider) => (
@@ -39,9 +46,9 @@ function Column({ id, todos, index }: Props) {
                 className={`pb-2 p-2 rounded-2xl shadow-sm 
 						${snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"}`}
               >
-                <h2 className="flex justify-between font-bold text-xl p-2">
+                <h2 className="flex  justify-between font-bold text-xl p-2">
                   {idToColumnText[id]}
-                  <span className="text-gray-500 bg-gray-200 rounded-full font px-2 py-2 text-sm font-normal ">
+                  <span className="text-gray-500 bg-gray-200 rounded-full w-[30px] h-[30px] font px-2 py-2 text-xs font-normal text-center">
                     {!searchString
                       ? todos.length
                       : todos.filter((todo) =>
@@ -84,7 +91,7 @@ function Column({ id, todos, index }: Props) {
 
                   <div className="flex items-center justify-end p-2">
                     <button
-                      onClick={openModal}
+                      onClick={handleAddModal}
                       className="text-green-500 hover:text-green-600"
                     >
                       <PlusCircleIcon className="h-10 w-10" />
